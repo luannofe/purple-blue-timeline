@@ -31,7 +31,6 @@ export default function Posts() {
             const addPost = async () => {
                 let ref = XX(db, 'posts', newpost)
                 let doc = await getDoc(ref)
-                console.log(doc)
                 setPosts(posts => [
                     doc, ...posts
                 ])

@@ -17,8 +17,6 @@ export function PostOptions({post, funcs}) {
         let newposts = funcs.posts.filter((item) => {
            return item.id !== post.id
         })
-        console.log(newposts)
-        console.log(funcs.posts)
         funcs.setPosts(newposts)
 
     }
