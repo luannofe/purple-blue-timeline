@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/purple-blue-timeline/static/css/main.9a6b4b79.css",
+    "main.js": "/purple-blue-timeline/static/js/main.0482a9d7.js",
+    "index.html": "/purple-blue-timeline/index.html",
+    "main.9a6b4b79.css.map": "/purple-blue-timeline/static/css/main.9a6b4b79.css.map",
+    "main.0482a9d7.js.map": "/purple-blue-timeline/static/js/main.0482a9d7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9a6b4b79.css",
+    "static/js/main.0482a9d7.js"
+  ]
+}
