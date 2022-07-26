@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import FireBase from "./firebase";
 import Posts from "./loadPosts";
+import Navbar from "./Navbar";
+import ProfileManager from "./ProfileManager";
 
 const auth = FireBase.auth
 
@@ -15,6 +17,7 @@ export default function Mainpage() {
 
     return (
         <>  
+            <Navbar/>
             <Posts/>
         </>
     )

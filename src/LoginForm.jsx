@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { userContext } from "./App";
 import FireBase from "./firebase";
 
 
-const db = FireBase.db
 const auth = FireBase.auth
 auth.updateCurrentUser()
 
@@ -12,7 +10,6 @@ export default function LoginForm() {
 
     const [formdata, setFormdata] = useState() 
 
-    const user = useContext(userContext)
 
 
     useEffect(() => {
@@ -20,15 +17,9 @@ export default function LoginForm() {
         if (!formdata) return;
 
         FireBase.signup(formdata.email, formdata.password)
-            .then((res) => {
-                user.setconnectedUser(FireBase.auth.currentUser)
-            })
             .catch((error) => {
                 if (error.code === 'auth/email-already-in-use') {
                     FireBase.login(formdata.email, formdata.password)
-                    .then((res) => {
-                        user.setconnectedUser(FireBase.auth.currentUser)
-                    })
                 }
             })
 

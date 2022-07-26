@@ -1,7 +1,7 @@
 $font : 'Roboto', sans-serif;
 
 body  {
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     margin: 0;
     background-image: linear-gradient(purple, rgb(54, 0, 54));
@@ -14,12 +14,13 @@ body  {
 }
 
 .maincontainer {
+    margin-top: 9px;
     min-height: 99vh;
     position: relative;
     margin-left: auto;
     margin-right: auto;
     background-image: linear-gradient(rgb(197, 0, 164), rgb(78, 0, 65));
-    width: 80vh;
+    width: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -376,4 +377,50 @@ body  {
             display: flex;
             justify-content: center;
             align-items: center
+    }
+
+    .Profile_manager {
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        top: 0;
+        background-color: pink;
+    }
+
+    .nav {
+        margin-left: auto;
+        margin-right: auto;
+        height: 60px;
+        background-color: rgb(0, 60, 95);
+        display: flex;
+        align-items: center;
+        border-radius: 22px;
+        width: 98%;
+
+        span {
+            color: white;
+            font-size: 2em;
+            width: 300px;
+            padding-left: 2%;
+
+        }
+
+        div {
+            margin-right: 3%;
+            margin-left: auto;
+            display: flex;
+            width: fit-content;
+            height: 50%;
+
+            button {
+                margin-left: 32px;
+                background: none;
+                color: white;
+                border: none;
+                border-radius: 12px;
+
+            }:hover {
+                background-color: rgba(255, 255, 255, 0.11);
+            }
+        }
     }
