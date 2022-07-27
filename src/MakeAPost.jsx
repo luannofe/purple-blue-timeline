@@ -2,7 +2,7 @@ import { userContext } from "./App";
 import React, { useContext, useEffect, useState } from "react";
 import FireBase from "./firebase";
 import { addDoc, getDocs, collection } from "./firebase";
-import UserHeader from "./UserHeader";
+import {UserHeader} from "./UserHeader";
 
 
 
@@ -39,7 +39,7 @@ export default function MakeAPost({props}) {
     return (
 
         <div className="MakeAPost_container">
-            <UserHeader data={user}/>
+            <UserHeader data={user} setProfpic={props.setProfpic}/>
             <div suppressContentEditableWarning={true} contentEditable='true' className="t" onKeyDown={MakePostH} onClick={((e)=>{e.target.innerText = ''})} onBlur={((e)=>{e.target.innerText = 'No que está pensando?'})}>
                 No que está pensando?
             </div>

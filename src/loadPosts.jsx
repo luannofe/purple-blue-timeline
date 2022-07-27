@@ -4,15 +4,12 @@ import { userContext } from "./App";
 import MakeAPost from "./MakeAPost";
 import FireBase from "./firebase";
 import { addDoc, getDocs, collection } from "./firebase";
-import UserHeader from "./UserHeader";
 import Loading from "./Loading";
 import { doc as XX, getDoc } from "firebase/firestore";
 import { PostOptions } from "./PostOptions";
+import PostHeader from "./UserHeader";
 
 const db = FireBase.db
-
-
-
 
 
 export default function Posts() {
@@ -21,8 +18,17 @@ export default function Posts() {
     const [posts,setPosts] = useState([])
     const user = useContext(userContext).connectedUser
     const[ isLoading, setLoading ]= useState({state: true, visibility: 'hidden'})
+    const [profpic, setProfpic] = useState('./placeholder.png')
 
-  
+    function sortPosts() {
+        posts.sort(
+            function (a,b) {
+                if (a.data().date > b.data().date) {
+                    return -1
+                } else {return 1}
+            }
+        )
+    }
 
     //use effect pra quando um post for feito
     useEffect(() => {
@@ -41,25 +47,15 @@ export default function Posts() {
     }, [newpost])
 
 
-    //use effect pra quando tiverem posts
-    useEffect(() => {
-        posts.sort(
-            function (a,b) {
-                if (a.data().date > b.data().date) {
-                    return 1
-                } else {return -1}
-            }
-        )
-    }, [posts])
-
-
-
+    
+    
+    
     //use effect pra criação do component
     useEffect(() => {
-       
+        
         setTimeout((() => {
             setLoading({state: false, visibility: 'visible'})
-        }), 1500)
+        }), 3500)
         const loadPosts = async () => {
             setPosts([])
             const pip = await getDocs(collection(db,'posts'))
@@ -71,8 +67,14 @@ export default function Posts() {
 
         }
         loadPosts()
+        sortPosts()
     }, [])  
 
+    //use effect pra quando tiverem posts
+    useEffect(() => {
+        sortPosts()
+    }, [posts])
+    
     const postCommentH = post => e => {
         let text = e.target.innerText
         if (e.key === 'Enter') {
@@ -89,10 +91,9 @@ export default function Posts() {
     
     }
 
-
     return (
         <div className="maincontainer" id="maincontainer">
-            <MakeAPost props = {{newpost, setNewpost}}/>
+            <MakeAPost props = {{newpost, setNewpost, setProfpic}}/>
             <div className="posts_container">
                 {isLoading.state && <Loading/>}
                 {posts.map(post => {
@@ -100,7 +101,7 @@ export default function Posts() {
                         <>
                             <div className="post" style={{visibility: isLoading.visibility}} key={post.id}>
                                 <div className="PostHeader">
-                                    <UserHeader data={post}/>
+                                    <PostHeader data={post}/>
                                     <PostOptions post={post} funcs={{posts,setPosts}} />
                                 </div>
                                 <div className="post_body">
@@ -112,7 +113,7 @@ export default function Posts() {
                                 </div>
                                 <div className="create_comment">
                                     <form>                 
-                                        <img src="./RAFA.png"/>
+                                        <img src={profpic}/>
                                         <div onKeyUp={postCommentH(post)} name="tocomment_body" contentEditable= "true" suppressContentEditableWarning={true} placeholder="Escreva um comentário...">
                                             Faça um comentário...
                                         </div>

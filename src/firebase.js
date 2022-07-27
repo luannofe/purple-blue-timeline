@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from "firebase/auth"
 
@@ -33,10 +33,14 @@ const FireBase = {
 
     updateProfile: function(user, obj) {
         return updateProfile(user, obj)
-    }
+    },
+
+    doc : doc
+
 
 }
 
+
 export default FireBase
 
-export {addDoc, collection, getDocs}
+export {addDoc, collection, getDocs, doc}

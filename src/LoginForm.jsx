@@ -1,9 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FireBase from "./firebase";
 
-
-const auth = FireBase.auth
-auth.updateCurrentUser()
 
 
 export default function LoginForm() {

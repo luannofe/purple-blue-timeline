@@ -10,7 +10,7 @@ export const userContext = createContext()
 
 export default function App() {
 
-    const [connectedUser,setconnectedUser] = useState()
+    const [connectedUser,setconnectedUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     FireBase.auth.onAuthStateChanged( (user) => {

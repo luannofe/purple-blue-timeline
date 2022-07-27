@@ -21,6 +21,7 @@ export function PostOptions({post, funcs}) {
 
     }
 
+
     return (
         <>
             <div className="PostOptions-parent">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import UserHeader from "./UserHeader";
 import FireBase from "./firebase";
+import PostHeader from "./UserHeader";
 
 const db = FireBase.db
 
@@ -31,7 +32,7 @@ export default function Comment({post_id}) {
         {comments.map( comment => {
             return (
                 <div className="comment" key={comment.id}>
-                    <UserHeader data={comment}/>
+                    <PostHeader data={comment}/>
                     <div className="post_body">
                         <span>{comment.data().body}</span>
                     </div>
