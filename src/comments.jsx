@@ -9,7 +9,6 @@ const db = FireBase.db
 
 export default function Comment({post_id, cmt}) { 
 
-    console.log(cmt)
 
     useEffect(() => {
         if (cmt.newcomment !== undefined) {
@@ -81,7 +80,6 @@ function InteractButtons({post}) {
 
             let array = likes
             let alreadyLiked = await search(array)
-            console.log(post.ref)
             
             if (alreadyLiked) {
 
