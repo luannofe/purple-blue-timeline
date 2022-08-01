@@ -69,12 +69,16 @@ body  {
 
             .interact_buttons_post {
                 margin-top: 4px;
-                width: 95%;
+                margin-left: auto;
+                margin-right: 50px;
+                width: fit-content;
                 margin-bottom: 8px;
+                display: flex;
+                align-items: center;
             
                 button {
-                    border: none;
                     margin-left: 10px;
+                    margin-right: 10px;
                 }
 
             }
@@ -99,6 +103,7 @@ body  {
                     }
                     
                     .create_comment > form > div {
+                        color: grey;
                         margin-left: 8px;
                         border-radius: 22px;
                         background-color: rgba(255, 255, 255, 0.637);
@@ -109,6 +114,9 @@ body  {
                         font-family:'Segoe UI';
                         padding: 0.5em;
                         vertical-align: middle;
+                    }:focus {
+                        color: black;
+                        transition: 20ms;
                     }
 
             .post_comments {
@@ -121,7 +129,6 @@ body  {
             .comment {
                 margin-left: 2%;
                 border-radius: 8px;
-                border-bottom: solid rgb(255, 31, 162);
                 .UserHeader {
                     margin-left: 0;
                 }

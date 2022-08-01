@@ -27,7 +27,7 @@ export default function MakeAPost({props}) {
                 body: text,
                 username: user.displayName,
                 email: user.email,
-                likes: 0,
+                likes: [],
                 date: Date.now()
             }).then(res => {
                 props.setNewpost(res.id)

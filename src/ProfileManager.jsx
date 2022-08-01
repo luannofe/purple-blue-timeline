@@ -1,12 +1,23 @@
-import { doc, setDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
 import FireBase from "./firebase";
 
-
+const db = FireBase.db
 
 export default function ProfileManager({props}) {
+    const [profpic, setProfpic] = useState('./placeholder.png')
+
     let nicktext
     let imgtext
+
+    useEffect(() => {
+
+        (async function () {
+            let docx = await getDoc(doc(db, 'users', FireBase.auth.currentUser.email))
+            setProfpic(docx.data().profileIMGURL)
+        })()
+
+    }, [])
 
     const [profileUpdated, setProfileUpdated] = useState(false)
 
@@ -41,7 +52,7 @@ export default function ProfileManager({props}) {
                 {!profileUpdated &&
                 <>
                     <div className="head">
-                        <img src="./RAFA.png" alt="" />
+                        <img src={profpic} alt="" />
                         <div className="inputs">
                             <div className="ncktext" contentEditable onKeyUp={handleNickname}>{FireBase.auth.currentUser.displayName}</div>
                             <div className="ncktext" contentEditable onKeyUp={handleIMGurl}>Img url</div>

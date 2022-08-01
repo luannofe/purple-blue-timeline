@@ -3,6 +3,7 @@ import FireBase from "./firebase";
 import Posts from "./loadPosts";
 import Navbar from "./Navbar";
 import ProfileManager from "./ProfileManager";
+import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 
 const auth = FireBase.auth
 
@@ -23,12 +24,18 @@ export default function Mainpage() {
     )
 }
 
+
 function FirstTimer({props}) {
 
     function usernameInputH(e) {
         let text = e.target.innerText
         if (e.key === 'Enter') {
             e.preventDefault()
+
+            setDoc(doc(FireBase.db, 'users', FireBase.auth.currentUser.email), {
+                profileIMGURL: './placeholder.png'
+            })
+
             FireBase.updateProfile(auth.currentUser, {
                 displayName: text
             }).then(asd => {

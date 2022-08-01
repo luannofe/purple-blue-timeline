@@ -5,7 +5,7 @@ import MakeAPost from "./MakeAPost";
 import FireBase from "./firebase";
 import { addDoc, getDocs, collection } from "./firebase";
 import Loading from "./Loading";
-import { doc as XX, getDoc } from "firebase/firestore";
+import { doc, doc as XX, getDoc, setDoc } from "firebase/firestore";
 import { PostOptions } from "./PostOptions";
 import PostHeader from "./UserHeader";
 
@@ -19,6 +19,8 @@ export default function Posts() {
     const user = useContext(userContext).connectedUser
     const[ isLoading, setLoading ]= useState({state: true, visibility: 'hidden'})
     const [profpic, setProfpic] = useState('./placeholder.png')
+    const [comments, setComments] = useState([])
+    const [newcomment, setNewcomment] = useState()
 
     function sortPosts() {
         posts.sort(
@@ -53,9 +55,20 @@ export default function Posts() {
     //use effect pra criação do component
     useEffect(() => {
         
+        //seta loading
         setTimeout((() => {
             setLoading({state: false, visibility: 'visible'})
         }), 3500)
+
+
+        //carrega a profpic
+        async function loadprofpic() {
+            let doc = await getDoc(XX(db, 'users', FireBase.auth.currentUser.email))
+            setProfpic(doc.data().profileIMGURL)
+        }
+        loadprofpic()
+
+        //carrega posta
         const loadPosts = async () => {
             setPosts([])
             const pip = await getDocs(collection(db,'posts'))
@@ -64,6 +77,7 @@ export default function Posts() {
                     ...posts, pip
                 ])
             })
+
 
         }
         loadPosts()
@@ -78,18 +92,27 @@ export default function Posts() {
     const postCommentH = post => e => {
         let text = e.target.innerText
         if (e.key === 'Enter') {
+            e.preventDefault()
             e.target.innerText = ""
+
 
             
             addDoc(collection(db, 'posts', post.id, 'comments'), {
                 body: text,
-                username: user.email,
-                likes: 0,
-                date: '03940394'
-            })
+                email: FireBase.auth.currentUser.email,
+                username: user.displayName,
+                likes: [],
+                date: Date.now()
+            }).then(
+                (res) => {
+                    setNewcomment(res.id)
+                }
+            )
         }
     
     }
+
+    
 
     return (
         <div className="maincontainer" id="maincontainer">
@@ -107,19 +130,16 @@ export default function Posts() {
                                 <div className="post_body">
                                     <span>{post.data().body}</span>
                                 </div>
-                                <div className="interact_buttons_post">
-                                    <button>Curtir</button>
-                                    <button>Comentar</button>
-                                </div>
+                                <InteractButtons post={post}/>
                                 <div className="create_comment">
                                     <form>                 
                                         <img src={profpic}/>
-                                        <div onKeyUp={postCommentH(post)} name="tocomment_body" contentEditable= "true" suppressContentEditableWarning={true} placeholder="Escreva um comentário...">
+                                        <div onKeyDown={postCommentH(post)} name="tocomment_body" contentEditable= "true" suppressContentEditableWarning={true} onClick={((e)=>{e.target.innerText = ''})} onBlur={((e)=>{e.target.innerText = 'Faça um comentário...'})}>
                                             Faça um comentário...
                                         </div>
                                     </form>
                                 </div>
-                                <Comment post_id = {post.id}/>
+                                <Comment post_id = {post.id} cmt = {{comments, setComments, newcomment, setNewcomment}}/>
                             </div>
                         </>
                     )
@@ -129,3 +149,87 @@ export default function Posts() {
     )
 }
 
+
+
+function InteractButtons({post}) {
+
+    const [likes, setLikes] = useState([])
+    const [liked, setLiked] = useState('Curtir')
+
+    async function search(array) {
+
+        for (let user in array) {
+
+            if (array[user] === FireBase.auth.currentUser.email) {
+                return true
+            }
+        }
+    }
+
+
+     const handleLikeButton = post => e => {
+
+        (async function() {
+
+
+
+            let array = likes
+            let alreadyLiked = await search(array)
+           
+            if (alreadyLiked) {
+
+                let newarr = array.filter((ind) => { return ind != FireBase.auth.currentUser.email})
+
+                await setDoc(doc(db, 'posts', post.id), {
+                    likes: newarr
+                }, {merge: true})
+                .then(
+                    () => {
+                        setLiked('Curtir')
+                        setLikes(newarr)
+                    }
+                )
+                return;
+            }
+
+            array.push(FireBase.auth.currentUser.email)
+            await setDoc(doc(db, 'posts', post.id), {
+                likes: array
+            }, {merge: true}).then(
+                () => {
+
+                    setLiked('Curtiu')
+                    setLikes(array)
+                }
+            )
+
+        })()
+
+    }
+
+    useEffect(() => {
+
+        (async function() {
+
+            let array = post.data().likes  
+            let alrLiked = await search(array)
+            setLikes(array)
+
+            if (alrLiked) {
+                setLiked('Curtiu')
+            }
+        })()
+
+    }, [])
+
+
+
+    return (
+        <div className="interact_buttons_post">
+            <button onMouseDown={handleLikeButton(post)}>{liked}</button>
+            <span>{likes.length}</span>
+        </div>
+    )
+
+}
+  
