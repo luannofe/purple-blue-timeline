@@ -19,7 +19,6 @@ export default function Posts() {
     const user = useContext(userContext).connectedUser
     const[ isLoading, setLoading ]= useState({state: true, visibility: 'hidden'})
     const [profpic, setProfpic] = useState('./placeholder.png')
-    const [comments, setComments] = useState([])
     const [newcomment, setNewcomment] = useState()
 
     function sortPosts() {
@@ -105,7 +104,7 @@ export default function Posts() {
                 date: Date.now()
             }).then(
                 (res) => {
-                    setNewcomment(res.id)
+                    setNewcomment({res: res, post_id: post.id})
                 }
             )
         }
@@ -139,7 +138,7 @@ export default function Posts() {
                                         </div>
                                     </form>
                                 </div>
-                                <Comment post_id = {post.id} cmt = {{comments, setComments, newcomment, setNewcomment}} key={(post.id + 1)}/>
+                                <Comment post_id = {post.id} cmt = {{ newcomment, setNewcomment}} key={(post.id + 1)}/>
                             </div>
                         </React.Fragment>
                     )

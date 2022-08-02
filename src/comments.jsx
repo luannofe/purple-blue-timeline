@@ -14,6 +14,7 @@ export default function Comment({post_id, cmt}) {
     useEffect(() => {
         const loadComments = async () => {
             let comm = await getDocs(collection(db,'posts', post_id, 'comments'))
+
             comm.forEach( comm => {
                 setThiscomments(comments => [
                     ...comments, comm
@@ -22,16 +23,21 @@ export default function Comment({post_id, cmt}) {
             })
         }
         loadComments()
+
     },[])
 
     useEffect(() => {
-        if (cmt.newcomment !== undefined) {
+        if (cmt.newcomment !== undefined && cmt.newcomment.post_id == post_id) {
             const addComment = async () => {
-                let ref = PIP(db, 'posts', post_id, 'comments', cmt.newcomment)
-                let doc = await getDoc(ref)
-                setThiscomments(comments => [
-                    doc, ...comments
-                ])
+                
+                getDoc(PIP(db, cmt.newcomment.res.path)).then(
+                    (res) => {
+                        setThiscomments(comments => [
+                            res, ...comments
+                        ])
+
+                    }
+                )
             }
             addComment()
         }
