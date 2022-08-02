@@ -9,27 +9,13 @@ const db = FireBase.db
 
 export default function Comment({post_id, cmt}) { 
 
-
-    useEffect(() => {
-        if (cmt.newcomment !== undefined) {
-            const addComment = async () => {
-                let ref = PIP(db, 'posts', post_id, 'comments', cmt.newcomment)
-                let doc = await getDoc(ref)
-                cmt.setComments(comments => [
-                    doc, ...comments
-                ])
-            }
-            addComment()
-        }
-    }, [cmt.newcomment])
+    const [thiscomments, setThiscomments] = useState([])
 
     useEffect(() => {
         const loadComments = async () => {
-
             let comm = await getDocs(collection(db,'posts', post_id, 'comments'))
             comm.forEach( comm => {
-
-                cmt.setComments(comments => [
+                setThiscomments(comments => [
                     ...comments, comm
                 ])
 
@@ -38,9 +24,23 @@ export default function Comment({post_id, cmt}) {
         loadComments()
     },[])
 
+    useEffect(() => {
+        if (cmt.newcomment !== undefined) {
+            const addComment = async () => {
+                let ref = PIP(db, 'posts', post_id, 'comments', cmt.newcomment)
+                let doc = await getDoc(ref)
+                setThiscomments(comments => [
+                    doc, ...comments
+                ])
+            }
+            addComment()
+        }
+    }, [cmt.newcomment])
+
+
     return (
-    <div className="post_comments">
-        {cmt.comments.map( comment => {
+    <div className="post_comments" key={(post_id + 2)}>
+        {thiscomments.map( comment => {
             return (
                 <div className="comment" key={comment.id}>
                     <PostHeader data={comment}/>

@@ -14,7 +14,7 @@ const db = FireBase.db
 
 export default function Posts() {
 
-    const [newpost, setNewpost] = useState()
+    const [newpost, setNewpost] = useState(undefined)
     const [posts,setPosts] = useState([])
     const user = useContext(userContext).connectedUser
     const[ isLoading, setLoading ]= useState({state: true, visibility: 'hidden'})
@@ -121,8 +121,8 @@ export default function Posts() {
                 {isLoading.state && <Loading/>}
                 {posts.map(post => {
                     return (
-                        <>
-                            <div className="post" style={{visibility: isLoading.visibility}} key={post.id}>
+                        <React.Fragment key={post.id}>
+                            <div className="post" style={{visibility: isLoading.visibility}} >
                                 <div className="PostHeader">
                                     <PostHeader data={post}/>
                                     <PostOptions post={post} funcs={{posts,setPosts}} />
@@ -139,9 +139,9 @@ export default function Posts() {
                                         </div>
                                     </form>
                                 </div>
-                                <Comment post_id = {post.id} cmt = {{comments, setComments, newcomment, setNewcomment}}/>
+                                <Comment post_id = {post.id} cmt = {{comments, setComments, newcomment, setNewcomment}} key={(post.id + 1)}/>
                             </div>
-                        </>
+                        </React.Fragment>
                     )
                 }        )         }
             </div>
